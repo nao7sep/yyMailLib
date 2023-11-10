@@ -57,29 +57,38 @@ namespace yyMailLib
             if (model.XPriority != null)
                 message.XPriority = model.XPriority.Value;
 
-            BodyBuilder bodyBuilder = new ();
+            // If there's nothing at all to output, BodyBuilder creates a message with "Content-Type: text/plain; charset=utf-8" and no content.
+            // We could also say an empty string is the mail body.
+
+            // If there's one, we get a single part message with the right "Content-Type".
+
+            // If there are 2 or more, we get a multipart message with the right "Content-Type" and a "boundary" parameter.
+
+            // So, no reason to check the actual number of parts or determine whether to update message.Body or not.
+
+            BodyBuilder xBodyBuilder = new ();
 
             if (string.IsNullOrWhiteSpace (model.HtmlBody) == false)
-                bodyBuilder.HtmlBody = model.HtmlBody;
+                xBodyBuilder.HtmlBody = model.HtmlBody;
 
             if (string.IsNullOrWhiteSpace (model.TextBody) == false)
-                bodyBuilder.TextBody = model.TextBody;
+                xBodyBuilder.TextBody = model.TextBody;
 
             if (model.Attachments != null)
             {
                 foreach (var xAttachment in model.Attachments)
                 {
-                    bodyBuilder.Attachments.Add (new MimePart (MimeTypes.GetMimeType (xAttachment.OriginalFilePath))
+                    xBodyBuilder.Attachments.Add (new MimePart (MimeTypes.GetMimeType (xAttachment.OriginalFilePath))
                     {
                         FileName = xAttachment.NewFileName ?? Path.GetFileName (xAttachment.OriginalFilePath),
                         ContentDisposition = new ContentDisposition (ContentDisposition.Attachment),
                         ContentTransferEncoding = ContentEncoding.Base64,
-                        Content = new MimeContent (File.OpenRead (xAttachment.OriginalFilePath!))
+                        Content = new MimeContent (new MemoryStream (File.ReadAllBytes (xAttachment.OriginalFilePath!))) // Avoids memory leakage.
                     });
                 }
             }
 
-            message.Body = bodyBuilder.ToMessageBody ();
+            message.Body = xBodyBuilder.ToMessageBody ();
         }
     }
 }
