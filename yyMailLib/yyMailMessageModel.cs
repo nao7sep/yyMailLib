@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using MimeKit;
 
 namespace yyMailLib
 {
@@ -45,8 +46,13 @@ namespace yyMailLib
         [JsonPropertyName ("date_utc")]
         public DateTime? DateUtc { get; set; }
 
+        // http://www.mimekit.net/docs/html/P_MimeKit_MimeMessage_From.htm
+
+        /// <summary>
+        /// Sender must be the actual person sending the message if From contains multiple people.
+        /// </summary>
         [JsonPropertyName ("from")]
-        public yyMailContactModel? From { get; set; }
+        public IList <yyMailContactModel>? From { get; set; }
 
         [JsonPropertyName ("headers")]
         public IDictionary <string, string>? Headers { get; set; }
@@ -58,7 +64,7 @@ namespace yyMailLib
         public IList <yyMailMessageTranslationModel>? HtmlBodyTranslations { get; set; }
 
         [JsonPropertyName ("importance")]
-        public yyMailMessageImportance? Importance { get; set; }
+        public MessageImportance? Importance { get; set; }
 
         [JsonPropertyName ("in_reply_to")]
         public string? InReplyTo { get; set; }
@@ -70,16 +76,16 @@ namespace yyMailLib
         public string? MessageId { get; set; }
 
         [JsonPropertyName ("mime_version")]
-        public string? MimeVersion { get; set; }
+        public Version? MimeVersion { get; set; }
 
         [JsonPropertyName ("priority")]
-        public yyMailMessagePriority? Priority { get; set; }
+        public MessagePriority? Priority { get; set; }
 
         [JsonPropertyName ("references")]
         public IList <string>? References { get; set; }
 
         [JsonPropertyName ("reply_to")]
-        public yyMailContactModel? ReplyTo { get; set; }
+        public IList <yyMailContactModel>? ReplyTo { get; set; }
 
         [JsonPropertyName ("sender")]
         public yyMailContactModel? Sender { get; set; }
@@ -100,6 +106,84 @@ namespace yyMailLib
         public IList <yyMailContactModel>? To { get; set; }
 
         [JsonPropertyName ("x_priority")]
-        public yyMailMessageXPriority? XPriority { get; set; }
+        public XMessagePriority? XPriority { get; set; }
+
+        public void AddAttachment (yyMailMessageAttachmentModel attachment)
+        {
+            Attachments ??= new List <yyMailMessageAttachmentModel> ();
+            Attachments.Add (attachment);
+        }
+
+        public void AddAttachment (string originalFilePath, string? newFileName = null) => AddAttachment (new yyMailMessageAttachmentModel (originalFilePath, newFileName));
+
+        public void AddBcc (yyMailContactModel contact)
+        {
+            Bcc ??= new List <yyMailContactModel> ();
+            Bcc.Add (contact);
+        }
+
+        public void AddBcc (string address, string? name = null) => AddBcc (new yyMailContactModel { Address = address, Name = name });
+
+        public void AddCc (yyMailContactModel contact)
+        {
+            Cc ??= new List <yyMailContactModel> ();
+            Cc.Add (contact);
+        }
+
+        public void AddCc (string address, string? name = null) => AddCc (new yyMailContactModel { Address = address, Name = name });
+
+        public void AddFrom (yyMailContactModel contact)
+        {
+            From ??= new List <yyMailContactModel> ();
+            From.Add (contact);
+        }
+
+        public void AddFrom (string address, string? name = null) => AddFrom (new yyMailContactModel { Address = address, Name = name });
+
+        public void AddHeader (string key, string value)
+        {
+            Headers ??= new Dictionary <string, string> ();
+            Headers.Add (key, value);
+        }
+
+        public void AddHtmlBodyTranslation (yyMailMessageTranslationModel translation)
+        {
+            HtmlBodyTranslations ??= new List <yyMailMessageTranslationModel> ();
+            HtmlBodyTranslations.Add (translation);
+        }
+
+        public void AddReference (string reference)
+        {
+            References ??= new List <string> ();
+            References.Add (reference);
+        }
+
+        public void AddReplyTo (yyMailContactModel contact)
+        {
+            ReplyTo ??= new List <yyMailContactModel> ();
+            ReplyTo.Add (contact);
+        }
+
+        public void AddReplyTo (string address, string? name = null) => AddReplyTo (new yyMailContactModel { Address = address, Name = name });
+
+        public void AddSubjectTranslation (yyMailMessageTranslationModel translation)
+        {
+            SubjectTranslations ??= new List <yyMailMessageTranslationModel> ();
+            SubjectTranslations.Add (translation);
+        }
+
+        public void AddTextBodyTranslation (yyMailMessageTranslationModel translation)
+        {
+            TextBodyTranslations ??= new List <yyMailMessageTranslationModel> ();
+            TextBodyTranslations.Add (translation);
+        }
+
+        public void AddTo (yyMailContactModel contact)
+        {
+            To ??= new List <yyMailContactModel> ();
+            To.Add (contact);
+        }
+
+        public void AddTo (string address, string? name = null) => AddTo (new yyMailContactModel { Address = address, Name = name });
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using MailKit.Security;
 
 namespace yyMailLib
 {
@@ -13,13 +14,18 @@ namespace yyMailLib
         [JsonPropertyName ("port")]
         public int? Port { get; set; }
 
+        /// <summary>
+        /// Set to SslOnConnect by default for security reasons.
+        /// </summary>
         [JsonPropertyName ("secure_socket_options")]
-        public yyMailSecureSocketOptions? SecureSocketOptions { get; set; }
+        public SecureSocketOptions? SecureSocketOptions { get; set; }
 
         [JsonPropertyName ("user_name")]
         public string? UserName { get; set; }
 
         [JsonPropertyName ("password")]
         public string? Password { get; set; }
+
+        public yyMailConnectionInfoModel () => SecureSocketOptions = MailKit.Security.SecureSocketOptions.SslOnConnect;
     }
 }

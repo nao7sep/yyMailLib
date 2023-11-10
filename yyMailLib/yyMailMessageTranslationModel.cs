@@ -21,5 +21,11 @@ namespace yyMailLib
         /// </summary>
         [JsonPropertyName ("details")]
         public IDictionary <string, string>? Details { get; set; }
+
+        public void AddDetail (string key, string value)
+        {
+            Details ??= new Dictionary <string, string> ();
+            Details.Add (key, value);
+        }
     }
 }

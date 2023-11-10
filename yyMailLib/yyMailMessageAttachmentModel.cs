@@ -31,5 +31,26 @@ namespace yyMailLib
 
         [JsonPropertyName ("content_length")]
         public long? ContentLength { get; set; }
+
+        public yyMailMessageAttachmentModel ()
+        {
+        }
+
+        public yyMailMessageAttachmentModel (string originalFilePath, string? newFileName = null)
+        {
+            OriginalFilePath = originalFilePath;
+            NewFileName = newFileName ?? Path.GetFileName (originalFilePath);
+
+            FileInfo xFile = new (originalFilePath);
+
+            // ChatGPT says these timestamp-related properties are reliably available on Windows and Mac while creation time may not be on Linux due to file system limitations.
+            // The source code suggests that there are fallback mechanisms in place for Linux:
+            // https://source.dot.net/#System.Private.CoreLib/src/libraries/System.Private.CoreLib/src/System/IO/FileStatus.Unix.cs,2b4046d793b2bb3a
+
+            CreationUtc = xFile.CreationTimeUtc;
+            ModificationUtc = xFile.LastWriteTimeUtc;
+            ReadUtc = xFile.LastAccessTimeUtc;
+            ContentLength = xFile.Length;
+        }
     }
 }

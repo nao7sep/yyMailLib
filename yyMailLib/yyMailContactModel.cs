@@ -22,5 +22,21 @@ namespace yyMailLib
 
         [JsonPropertyName ("preferred_body_format")]
         public yyMailMessageBodyFormat? PreferredBodyFormat { get; set; }
+
+        public yyMailContactModel ()
+        {
+        }
+
+        public yyMailContactModel (string address, string? name = null)
+        {
+            Address = address;
+            Name = name;
+        }
+
+        public void AddPreferredLanguage (string language)
+        {
+            PreferredLanguages ??= new List <string> ();
+            PreferredLanguages.Add (language);
+        }
     }
 }
