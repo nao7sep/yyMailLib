@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
 using yyLib;
@@ -17,7 +15,12 @@ namespace yyMailLibConsole
         {
             try
             {
+                bool xContinues = true;
+
+                // -----------------------------------------------------------------------------
+
                 string xConnectionInfoFilePath = yyApplicationDirectory.MapPath ("ConnectionInfo.json");
+                yyMailConnectionInfoModel? xConnectionInfo = null;
 
                 if (File.Exists (xConnectionInfoFilePath) == false)
                 {
@@ -49,21 +52,22 @@ namespace yyMailLibConsole
                     File.WriteAllText (xConnectionInfoFilePath, xJson, Encoding.UTF8);
 
                     Console.WriteLine ("Please edit 'ConnectionInfo.json' and run this program again.");
-
-                    // I wont be doing "Press any key to..."
-                    // We usually run this program with a debugger attached.
-                    return;
+                    xContinues = false;
                 }
 
-                string xFileContents = File.ReadAllText (xConnectionInfoFilePath, Encoding.UTF8);
-                var xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfoModel> (xFileContents, yyJson.DefaultDeserializationOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xConnectionInfo, yyJson.DefaultSerializationOptions));
+                else
+                {
+                    string xFileContents = File.ReadAllText (xConnectionInfoFilePath, Encoding.UTF8);
+                    xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfoModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    Console.WriteLine (JsonSerializer.Serialize (xConnectionInfo, yyJson.DefaultSerializationOptions));
+                }
 
                 // -----------------------------------------------------------------------------
 
                 // Let's do the same thing with the sender, who'll be added to From.
 
                 string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
+                yyMailContactModel? xSenderInfo = null;
 
                 if (File.Exists (xSenderInfoFilePath) == false)
                 {
@@ -74,6 +78,7 @@ namespace yyMailLibConsole
                     };
 
                     // Roundtrip test:
+                    // These values arent used for the test.
 
                     xTempSenderInfo.AddPreferredLanguage ("Japanese");
                     xTempSenderInfo.AddPreferredLanguage ("Chinese");
@@ -82,16 +87,20 @@ namespace yyMailLibConsole
                     string xJson = JsonSerializer.Serialize (xTempSenderInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xSenderInfoFilePath, xJson, Encoding.UTF8);
                     Console.WriteLine ("Please edit 'Sender.json' and run this program again.");
-                    return;
+                    xContinues = false;
                 }
 
-                xFileContents = File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8);
-                var xSenderInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xSenderInfo, yyJson.DefaultSerializationOptions));
+                else
+                {
+                    string xFileContents = File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8);
+                    xSenderInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    Console.WriteLine (JsonSerializer.Serialize (xSenderInfo, yyJson.DefaultSerializationOptions));
+                }
 
                 // -----------------------------------------------------------------------------
 
                 string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
+                yyMailContactModel? xRecipientInfo = null;
 
                 if (File.Exists (xRecipientInfoFilePath) == false)
                 {
@@ -104,12 +113,23 @@ namespace yyMailLibConsole
                     string xJson = JsonSerializer.Serialize (xTempRecipientInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xRecipientInfoFilePath, xJson, Encoding.UTF8);
                     Console.WriteLine ("Please edit 'Recipient.json' and run this program again.");
-                    return;
+                    xContinues = false;
                 }
 
-                xFileContents = File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8);
-                var xRecipientInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xRecipientInfo, yyJson.DefaultSerializationOptions));
+                else
+                {
+                    string xFileContents = File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8);
+                    xRecipientInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    Console.WriteLine (JsonSerializer.Serialize (xRecipientInfo, yyJson.DefaultSerializationOptions));
+                }
+
+                // -----------------------------------------------------------------------------
+                
+                // I wont be doing "Press any key to..."
+                // We usually run this program with a debugger attached.
+
+                if (xContinues == false)
+                    return;
 
                 // -----------------------------------------------------------------------------
 
@@ -242,8 +262,10 @@ namespace yyMailLibConsole
 
                 // -----------------------------------------------------------------------------
 
-                string xPartialFilePath = Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.DesktopDirectory),
+                string xPartialFilePath = Path.Join (yyApplicationDirectory.MapPath ("Messages"),
                     $"Message-{DateTime.Now:yyyyMMdd'-'HHmmss}"); // Local time.
+
+                yyDirectory.CreateParent (xPartialFilePath);
 
                 // Should be safe enough.
                 File.WriteAllText (xPartialFilePath + ".json", xJsonAlt, Encoding.UTF8);
