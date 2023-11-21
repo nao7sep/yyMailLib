@@ -283,7 +283,7 @@ namespace yyMailLibConsole
 
                 var xSendingTask = await xMailClient.SendAsync (xMimeMessage);
 
-                Console.WriteLine (xSendingTask);
+                Console.WriteLine (xSendingTask.GetVisibleString ());
             }
 
             catch (Exception xException)
