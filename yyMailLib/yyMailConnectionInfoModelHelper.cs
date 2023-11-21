@@ -2,7 +2,7 @@
 
 namespace yyMailLib
 {
-    public static class yyMailConnectionInfoModelExt
+    public static class yyMailConnectionInfoModelHelper
     {
         public static async Task ConnectAsync (this IMailService service, yyMailConnectionInfoModel connectionInfo, CancellationToken? cancellationToken = null) =>
             await service.ConnectAsync (connectionInfo.Host, connectionInfo.Port!.Value, connectionInfo.SecureSocketOptions!.Value, cancellationToken ?? CancellationToken.None);

@@ -2,7 +2,7 @@
 
 namespace yyMailLib
 {
-    public static class yyMailMessageModelExt
+    public static class yyMailMessageModelHelper
     {
         public static void Load (this MimeMessage message, yyMailMessageModel model)
         {

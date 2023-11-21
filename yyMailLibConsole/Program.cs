@@ -17,17 +17,6 @@ namespace yyMailLibConsole
         {
             try
             {
-                // For reading and writing JSON files:
-
-                var xJsonSerializerOptions = new JsonSerializerOptions
-                {
-                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
-                };
-
-                // -----------------------------------------------------------------------------
-
                 string xConnectionInfoFilePath = yyApplicationDirectory.MapPath ("ConnectionInfo.json");
 
                 if (File.Exists (xConnectionInfoFilePath) == false)
@@ -53,7 +42,7 @@ namespace yyMailLibConsole
                         Password = "PASSWORD"
                     };
 
-                    string xJson = JsonSerializer.Serialize (xTempConnectionInfo, xJsonSerializerOptions);
+                    string xJson = JsonSerializer.Serialize (xTempConnectionInfo, yyJson.DefaultSerializationOptions);
 
                     // It is generally recommended not to insert a BOM nowadays,
                     // but I, as a CJK-region developer, am very happy going around inserting them everywhere.
@@ -67,8 +56,8 @@ namespace yyMailLibConsole
                 }
 
                 string xFileContents = File.ReadAllText (xConnectionInfoFilePath, Encoding.UTF8);
-                var xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfoModel> (xFileContents, xJsonSerializerOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xConnectionInfo, xJsonSerializerOptions));
+                var xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfoModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                Console.WriteLine (JsonSerializer.Serialize (xConnectionInfo, yyJson.DefaultSerializationOptions));
 
                 // -----------------------------------------------------------------------------
 
@@ -90,15 +79,15 @@ namespace yyMailLibConsole
                     xTempSenderInfo.AddPreferredLanguage ("Chinese");
                     xTempSenderInfo.PreferredBodyFormat = yyMailMessageBodyFormat.Plaintext;
 
-                    string xJson = JsonSerializer.Serialize (xTempSenderInfo, xJsonSerializerOptions);
+                    string xJson = JsonSerializer.Serialize (xTempSenderInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xSenderInfoFilePath, xJson, Encoding.UTF8);
                     Console.WriteLine ("Please edit 'Sender.json' and run this program again.");
                     return;
                 }
 
                 xFileContents = File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8);
-                var xSenderInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, xJsonSerializerOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xSenderInfo, xJsonSerializerOptions));
+                var xSenderInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                Console.WriteLine (JsonSerializer.Serialize (xSenderInfo, yyJson.DefaultSerializationOptions));
 
                 // -----------------------------------------------------------------------------
 
@@ -112,15 +101,15 @@ namespace yyMailLibConsole
                         Address = "ADDRESS"
                     };
 
-                    string xJson = JsonSerializer.Serialize (xTempRecipientInfo, xJsonSerializerOptions);
+                    string xJson = JsonSerializer.Serialize (xTempRecipientInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xRecipientInfoFilePath, xJson, Encoding.UTF8);
                     Console.WriteLine ("Please edit 'Recipient.json' and run this program again.");
                     return;
                 }
 
                 xFileContents = File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8);
-                var xRecipientInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, xJsonSerializerOptions);
-                Console.WriteLine (JsonSerializer.Serialize (xRecipientInfo, xJsonSerializerOptions));
+                var xRecipientInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                Console.WriteLine (JsonSerializer.Serialize (xRecipientInfo, yyJson.DefaultSerializationOptions));
 
                 // -----------------------------------------------------------------------------
 
@@ -248,13 +237,13 @@ namespace yyMailLibConsole
 
                 xMessage.XPriority = XMessagePriority.Low;
 
-                string xJsonAlt = JsonSerializer.Serialize (xMessage, xJsonSerializerOptions);
+                string xJsonAlt = JsonSerializer.Serialize (xMessage, yyJson.DefaultSerializationOptions);
                 Console.WriteLine (xJsonAlt);
 
                 // -----------------------------------------------------------------------------
 
                 string xPartialFilePath = Path.Join (Environment.GetFolderPath (Environment.SpecialFolder.DesktopDirectory),
-                    $"Message_{DateTime.Now:yyyyMMdd'_'HHmmss}"); // Local time.
+                    $"Message-{DateTime.Now:yyyyMMdd'-'HHmmss}"); // Local time.
 
                 // Should be safe enough.
                 File.WriteAllText (xPartialFilePath + ".json", xJsonAlt, Encoding.UTF8);
@@ -277,6 +266,7 @@ namespace yyMailLibConsole
 
             catch (Exception xException)
             {
+                yySimpleLogger.Default.TryWriteException (xException);
                 Console.WriteLine (xException.ToString ());
             }
         }
