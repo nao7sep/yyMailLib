@@ -64,6 +64,7 @@ namespace yyMailLib
         public IList <yyMailMessageTranslationModel>? HtmlBodyTranslations { get; set; }
 
         [JsonPropertyName ("importance")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
         public MessageImportance? Importance { get; set; }
 
         [JsonPropertyName ("in_reply_to")]
@@ -79,6 +80,7 @@ namespace yyMailLib
         public Version? MimeVersion { get; set; }
 
         [JsonPropertyName ("priority")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
         public MessagePriority? Priority { get; set; }
 
         [JsonPropertyName ("references")]
@@ -106,6 +108,7 @@ namespace yyMailLib
         public IList <yyMailContactModel>? To { get; set; }
 
         [JsonPropertyName ("x_priority")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
         public XMessagePriority? XPriority { get; set; }
 
         public void AddAttachment (yyMailMessageAttachmentModel attachment)

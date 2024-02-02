@@ -77,13 +77,6 @@ namespace yyMailLibConsole
                         Address = "ADDRESS"
                     };
 
-                    // Roundtrip test:
-                    // These values arent used for the test.
-
-                    xTempSenderInfo.AddPreferredLanguage ("Japanese");
-                    xTempSenderInfo.AddPreferredLanguage ("Chinese");
-                    xTempSenderInfo.PreferredBodyFormat = yyMailMessageBodyFormat.Plaintext;
-
                     string xJson = JsonSerializer.Serialize (xTempSenderInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xSenderInfoFilePath, xJson, Encoding.UTF8);
                     Console.WriteLine ("Please edit 'Sender.json' and run this program again.");
@@ -109,6 +102,13 @@ namespace yyMailLibConsole
                         Name = "NAME",
                         Address = "ADDRESS"
                     };
+
+                    // Roundtrip test:
+                    // These values arent used for the test.
+
+                    xTempRecipientInfo.AddPreferredLanguage ("Japanese");
+                    xTempRecipientInfo.AddPreferredLanguage ("Chinese");
+                    xTempRecipientInfo.PreferredBodyFormat = yyMailMessageBodyFormat.Plaintext;
 
                     string xJson = JsonSerializer.Serialize (xTempRecipientInfo, yyJson.DefaultSerializationOptions);
                     File.WriteAllText (xRecipientInfoFilePath, xJson, Encoding.UTF8);

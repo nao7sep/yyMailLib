@@ -1,0 +1,17 @@
+﻿[Delete]
+Lib
+
+[Copy]
+yyMailLib/bin/Release/net8.0 > Lib
+
+[Delete]
+Lib/yyLib.pdb
+Lib/yyMailLib.pdb
+
+[Exclude]
+.git
+.vs
+yyMailLib/bin
+yyMailLib/obj
+yyMailLibConsole/bin
+yyMailLibConsole/obj

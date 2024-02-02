@@ -18,6 +18,7 @@ namespace yyMailLib
         /// Set to SslOnConnect by default for security reasons.
         /// </summary>
         [JsonPropertyName ("secure_socket_options")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
         public SecureSocketOptions? SecureSocketOptions { get; set; } = MailKit.Security.SecureSocketOptions.SslOnConnect;
 
         [JsonPropertyName ("user_name")]

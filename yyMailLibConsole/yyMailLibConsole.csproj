@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\yyMailLib\yyMailLib.csproj" />
+      <ProjectReference Include="..\yyMailLib\yyMailLib.csproj" />
     </ItemGroup>
 
     <ItemGroup>

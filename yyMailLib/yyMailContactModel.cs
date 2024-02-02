@@ -21,6 +21,7 @@ namespace yyMailLib
         public IList <string>? PreferredLanguages { get; set; }
 
         [JsonPropertyName ("preferred_body_format")]
+        [JsonConverter (typeof (JsonStringEnumConverter))]
         public yyMailMessageBodyFormat? PreferredBodyFormat { get; set; }
 
         public yyMailContactModel ()
