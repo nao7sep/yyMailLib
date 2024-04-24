@@ -20,13 +20,13 @@ namespace yyMailLibConsole
                 // -----------------------------------------------------------------------------
 
                 string xConnectionInfoFilePath = yyApplicationDirectory.MapPath ("ConnectionInfo.json");
-                yyMailConnectionInfoModel? xConnectionInfo = null;
+                yyMailConnectionInfo? xConnectionInfo = null;
 
                 if (File.Exists (xConnectionInfoFilePath) == false)
                 {
                     // Makes a temp file and exits.
 
-                    var xTempConnectionInfo = new yyMailConnectionInfoModel
+                    var xTempConnectionInfo = new yyMailConnectionInfo
                     {
                         Host = "HOST",
 
@@ -58,7 +58,7 @@ namespace yyMailLibConsole
                 else
                 {
                     string xFileContents = File.ReadAllText (xConnectionInfoFilePath, Encoding.UTF8);
-                    xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfoModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    xConnectionInfo = JsonSerializer.Deserialize <yyMailConnectionInfo> (xFileContents, yyJson.DefaultDeserializationOptions);
                     Console.WriteLine (JsonSerializer.Serialize (xConnectionInfo, yyJson.DefaultSerializationOptions));
                 }
 
@@ -67,11 +67,11 @@ namespace yyMailLibConsole
                 // Let's do the same thing with the sender, who'll be added to From.
 
                 string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
-                yyMailContactModel? xSenderInfo = null;
+                yyMailContact? xSenderInfo = null;
 
                 if (File.Exists (xSenderInfoFilePath) == false)
                 {
-                    var xTempSenderInfo = new yyMailContactModel
+                    var xTempSenderInfo = new yyMailContact
                     {
                         Name = "NAME",
                         Address = "ADDRESS"
@@ -86,18 +86,18 @@ namespace yyMailLibConsole
                 else
                 {
                     string xFileContents = File.ReadAllText (xSenderInfoFilePath, Encoding.UTF8);
-                    xSenderInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    xSenderInfo = JsonSerializer.Deserialize <yyMailContact> (xFileContents, yyJson.DefaultDeserializationOptions);
                     Console.WriteLine (JsonSerializer.Serialize (xSenderInfo, yyJson.DefaultSerializationOptions));
                 }
 
                 // -----------------------------------------------------------------------------
 
                 string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
-                yyMailContactModel? xRecipientInfo = null;
+                yyMailContact? xRecipientInfo = null;
 
                 if (File.Exists (xRecipientInfoFilePath) == false)
                 {
-                    var xTempRecipientInfo = new yyMailContactModel
+                    var xTempRecipientInfo = new yyMailContact
                     {
                         Name = "NAME",
                         Address = "ADDRESS"
@@ -119,12 +119,12 @@ namespace yyMailLibConsole
                 else
                 {
                     string xFileContents = File.ReadAllText (xRecipientInfoFilePath, Encoding.UTF8);
-                    xRecipientInfo = JsonSerializer.Deserialize <yyMailContactModel> (xFileContents, yyJson.DefaultDeserializationOptions);
+                    xRecipientInfo = JsonSerializer.Deserialize <yyMailContact> (xFileContents, yyJson.DefaultDeserializationOptions);
                     Console.WriteLine (JsonSerializer.Serialize (xRecipientInfo, yyJson.DefaultSerializationOptions));
                 }
 
                 // -----------------------------------------------------------------------------
-                
+
                 // I wont be doing "Press any key to..."
                 // We usually run this program with a debugger attached.
 
@@ -141,7 +141,7 @@ namespace yyMailLibConsole
 
                 // -----------------------------------------------------------------------------
 
-                yyMailMessageModel xMessage = new ();
+                yyMailMessage xMessage = new ();
 
                 // In alphabetical order, excluding large files.
 
@@ -165,7 +165,7 @@ namespace yyMailLibConsole
 
                 xMessage.HtmlBody = "<b>HTML body.</b>";
 
-                xMessage.AddHtmlBodyTranslation (new yyMailMessageTranslationModel
+                xMessage.AddHtmlBodyTranslation (new yyMailMessageTranslation
                 {
                     Utc = DateTime.UtcNow,
                     Language = "Japanese",
@@ -224,7 +224,7 @@ namespace yyMailLibConsole
 
                 xMessage.Subject = "Subject";
 
-                xMessage.AddSubjectTranslation (new yyMailMessageTranslationModel
+                xMessage.AddSubjectTranslation (new yyMailMessageTranslation
                 {
                     Utc = DateTime.UtcNow,
                     Language = "Japanese",
@@ -239,7 +239,7 @@ namespace yyMailLibConsole
 
                 xMessage.TextBody = "Plaintext body.";
 
-                xMessage.AddTextBodyTranslation (new yyMailMessageTranslationModel
+                xMessage.AddTextBodyTranslation (new yyMailMessageTranslation
                 {
                     Utc = DateTime.UtcNow,
                     Language = "Japanese",
