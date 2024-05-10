@@ -19,7 +19,7 @@ namespace yyMailLibConsole
 
                 // -----------------------------------------------------------------------------
 
-                string xConnectionInfoFilePath = yyApplicationDirectory.MapPath ("ConnectionInfo.json");
+                string xConnectionInfoFilePath = yyAppDirectory.MapPath ("ConnectionInfo.json");
                 yyMailConnectionInfo? xConnectionInfo = null;
 
                 if (File.Exists (xConnectionInfoFilePath) == false)
@@ -66,7 +66,7 @@ namespace yyMailLibConsole
 
                 // Let's do the same thing with the sender, who'll be added to From.
 
-                string xSenderInfoFilePath = yyApplicationDirectory.MapPath ("Sender.json");
+                string xSenderInfoFilePath = yyAppDirectory.MapPath ("Sender.json");
                 yyMailContact? xSenderInfo = null;
 
                 if (File.Exists (xSenderInfoFilePath) == false)
@@ -92,7 +92,7 @@ namespace yyMailLibConsole
 
                 // -----------------------------------------------------------------------------
 
-                string xRecipientInfoFilePath = yyApplicationDirectory.MapPath ("Recipient.json");
+                string xRecipientInfoFilePath = yyAppDirectory.MapPath ("Recipient.json");
                 yyMailContact? xRecipientInfo = null;
 
                 if (File.Exists (xRecipientInfoFilePath) == false)
@@ -145,7 +145,7 @@ namespace yyMailLibConsole
 
                 // In alphabetical order, excluding large files.
 
-                foreach (string xFilePath in Directory.GetFiles (yyApplicationDirectory.Path, "*.*", SearchOption.TopDirectoryOnly).
+                foreach (string xFilePath in Directory.GetFiles (yyAppDirectory.Path, "*.*", SearchOption.TopDirectoryOnly).
                         Where (x => new FileInfo (x).Length < 100 * 1024).OrderBy (y => y, StringComparer.OrdinalIgnoreCase))
                     xMessage.AddAttachment (xFilePath);
 
@@ -262,7 +262,7 @@ namespace yyMailLibConsole
 
                 // -----------------------------------------------------------------------------
 
-                string xPartialFilePath = Path.Join (yyApplicationDirectory.MapPath ("Messages"),
+                string xPartialFilePath = Path.Join (yyAppDirectory.MapPath ("Messages"),
                     $"Message-{DateTime.Now:yyyyMMdd'-'HHmmss}"); // Local time.
 
                 yyDirectory.CreateParent (xPartialFilePath);
