@@ -15,15 +15,15 @@
 
         <Configuration></Configuration>
 
-        <Version>0.5</Version>
+        <Version>0.6</Version>
         <AssemblyVersion></AssemblyVersion>
         <FileVersion></FileVersion>
         <InformationalVersion></InformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MailKit" Version="4.5.0" />
-      <PackageReference Include="MimeKit" Version="4.5.0" />
+      <PackageReference Include="MailKit" Version="4.7.0" />
+      <PackageReference Include="MimeKit" Version="4.7.0" />
     </ItemGroup>
 
     <ItemGroup>
